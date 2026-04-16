@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CCPOP-Ghana Conference Map</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <style>
+    #map {
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>CCPOP-Ghana Conference Map (Recommended Hotels + Search Nearby)</h2>
+
+<div id="map"></div>
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<script>
+  // Venue coordinates (UGMC)
+  const venue = [5.6506, -0.1870];
+
+  // Create map
+  const map = L.map('map').setView(venue, 13);
+
+  if (typeof L.Control.Geocoder !== 'undefined') {
+  L.Control.geocoder().addTo(map);
+}
+
+  // Map background
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Custom red icon for venue
+  const venueIcon = L.icon({
+    iconUrl: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+    iconSize: [32, 32],
+    iconAnchor: [16, 32]
+  });
+
+  // Add venue marker
+  L.marker(venue, { icon: venueIcon })
+    .addTo(map)
+    .bindPopup("<b>UGMC Medical Simulation & Training Centre</b>")
+    .openPopup();
+
+  // Hotels (spread across areas)
+  const hotels = [
+    {
+      name: "African Regent Hotel",
+      coords: [5.6055, -0.1710],
+      desc: "Upscale hotel near Airport"
+    },
+    {
+      name: "Erata Hotel",
+      coords: [5.6350, -0.1725],
+      desc: "Mid-range and quiet"
+    },
+    {
+      name: "Mensvic Grand Hotel",
+      coords: [5.6200, -0.1600],
+      desc: "Comfortable mid-range option"
+    },
+    {
+      name: "Angie Hill Hotel",
+      coords: [5.6408, -0.1665],
+      desc: "Affordable (North Legon side)"
+    },
+    {
+      name: "Bethel Heights Hotel",
+      coords: [5.6405, -0.1800],
+      desc: "Budget-friendly (Haatso area)"
+    },
+    {
+      name: "University of Ghana Guest Centre",
+      coords: [5.6515, -0.1865],
+      desc: "Very close (on campus)"
+    },
+    {
+      name: "East Legon (A&C Mall area)",
+      coords: [5.6370, -0.1510],
+      desc: "Many hotels + restaurants"
+    },
+    {
+      name: "Madina Area Hotels",
+      coords: [5.6680, -0.1640],
+      desc: "Budget options in Madina"
+    }
+  ];
+
+  // Add hotel markers
+  hotels.forEach(hotel => {
+    L.marker(hotel.coords)
+      .addTo(map)
+      .bindPopup(`
+  <b>${hotel.name}</b><br>
+  ${hotel.desc}<br><br>
+  <a href="https://www.google.com/maps/dir/?api=1&destination=${hotel.coords[0]},${hotel.coords[1]}" target="_blank">
+    Get Directions
+  </a>
+`);
+  });
+
+</script>
+
+</body>
+</html>
